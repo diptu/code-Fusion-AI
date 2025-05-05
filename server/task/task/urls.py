@@ -22,4 +22,5 @@ from countries import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("country/", include("countries.urls")),
+    path("api/", include("api.urls")),
 ]
