@@ -17,10 +17,31 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from countries import views
+
+# from countries import views
+from .views import LogoutView
+
+# from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("country/", include("countries.urls")),
     path("api/countries/", include("api.urls")),
+    # Login
+    path(
+        "api/login/",
+        auth_views.LoginView.as_view(template_name="registration/login.html"),
+        name="login",
+    ),
+    path("api/logout/", LogoutView.as_view(), name="logout"),
+    path(
+        "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
+    ),  # login
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]

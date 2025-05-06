@@ -6,7 +6,7 @@ from .views import (
     CountryUpdateView,
     CountrySearchByNameView,
     CountriesInSameRegionView,
-    CountriesByLanguageView,
+    CountriesBySpokenLanguageView,
     CountryDeleteView,
 )
 
@@ -30,7 +30,7 @@ urlpatterns = [
     # GET: /api/countries/language/?ln=spanish
     path(
         "language/",
-        CountriesByLanguageView.as_view(),
+        CountriesBySpokenLanguageView.as_view(),
         name="countries-by-language",
     ),
     #  POST api/countries/create/

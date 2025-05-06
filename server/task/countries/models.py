@@ -179,5 +179,17 @@ class Country(models.Model):
             f"{latlng}"
         )
 
-    # def get_absolute_url(self):
-    #     return reverse("country_detail", kwargs={"cca2": self.cca2.lower()})
+    @property
+    def language(self):
+        """
+        Returns a list of language names from the 'languages' JSON field.
+
+        Example:
+            If languages = {"eng": "English", "fra": "French"}, returns ["English", "French"]
+
+        Returns:
+            list[str]: List of language names or an empty list if not available.
+        """
+        if isinstance(self.languages, dict):
+            return list(self.languages.values())
+        return []

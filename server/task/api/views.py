@@ -5,7 +5,12 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework import filters
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework.exceptions import PermissionDenied
+
+# from rest_framework import filters
 from django.db.models import Q
 
 
@@ -23,6 +28,7 @@ class CountryListView(generics.ListAPIView):
         GET /api/countries/
     """
 
+    permission_classes = [IsAuthenticated]
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     lookup_field = "name_common"
@@ -84,6 +90,14 @@ class CountryCreateView(generics.CreateAPIView):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
+    def perform_create(self, serializer):
+        # Check if the user is a superuser before saving
+        if not self.request.user.is_superuser:
+            raise PermissionDenied("You must be a superuser to create a country.")
+
+        # Save the country if the user is a superuser
+        serializer.save()
+
 
 class CountryUpdateView(generics.RetrieveUpdateAPIView):
     """
@@ -141,7 +155,16 @@ class CountryDeleteView(APIView):
         DELETE /api/countries/1/
     """
 
+    permission_classes = [IsAuthenticated]  # Ensure user is authenticated
+
     def delete(self, request, item_id):
+        # Check if the user is a superuser
+        if not request.user.is_superuser:
+            return Response(
+                {"error": "You do not have permission to delete this country."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         try:
             country = Country.objects.get(id=item_id)
         except Country.DoesNotExist:
@@ -218,7 +241,7 @@ class CountriesInSameRegionView(generics.ListAPIView):
 #         return Country.objects.filter(languages__icontains=language)
 
 
-class CountriesByLanguageView(generics.ListAPIView):
+class CountriesBySpokenLanguageView(generics.ListAPIView):
     """
     API endpoint that returns a sorted list of country names where a specified language is spoken.
 
