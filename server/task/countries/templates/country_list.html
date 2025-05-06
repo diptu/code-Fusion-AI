@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>All Countries</h1>
+
+  <ul>
+    {% for country in countries %}
+      <li>{{ country.name_common }} ({{ country.region }})</li>
+    {% endfor %}
+  </ul>
+
+  <div class="pagination">
+    <span class="step-links">
+        {% if countries.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ countries.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ countries.number }} of {{ countries.paginator.num_pages }}.
+        </span>
+
+        {% if countries.has_next %}
+            <a href="?page={{ countries.next_page_number }}">next</a>
+            <a href="?page={{ countries.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+  </div>
+{% endblock %}

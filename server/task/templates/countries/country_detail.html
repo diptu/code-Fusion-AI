@@ -1,0 +1,69 @@
+{% extends "../includes/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Country Summary</h2>
+    
+    <h1>{{ country.name_common }}</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Country Information</h5>
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Country Name</th>
+                    <td>{{ country.name_common }}</td>
+                </tr>
+                <tr>
+                    <th>Official Name</th>
+                    <td>{{ country.name_official }}</td>
+                </tr>
+                <tr>
+                    <th>CCA2 Code</th>
+                    <td>{{ country.cca2 }}</td>
+                </tr>
+                <tr>
+                    <th>Capital</th>
+                    <td>{{ country.capital|join:", " }}</td>
+                </tr>
+                <tr>
+                    <th>Population</th>
+                    <td>{{ country.population }}</td>
+                </tr>
+                <tr>
+                    <th>Area</th>
+                    <td>{{ country.area }} km²</td>
+                </tr>
+                <tr>
+                    <th>Region</th>
+                    <td>{{ country.region }}</td>
+                </tr>
+                <tr>
+                    <th>Subregion</th>
+                    <td>{{ country.subregion }}</td>
+                </tr>
+                <tr>
+                    <th>Languages</th>
+                    <td>{{ country.languages|join:", " }}</td>
+                </tr>
+                <tr>
+                    <th>Timezone</th>
+                    <td>{{ country.timezones|join:", " }}</td>
+                </tr>
+                <tr>
+                    <th>Flag</th>
+                    <td>{{ country.flag}}</td>
+                </tr>
+                <tr>
+                    <th>Summary</th>
+                    <td><pre>{{ summary }}</pre></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+    <a href="{% url 'country-list' %}" class="btn btn-primary mt-3">Back to Country List</a>
+</div>
+{% endblock %}

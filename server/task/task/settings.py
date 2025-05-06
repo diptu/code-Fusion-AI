@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "api",
     "corsheaders",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -183,5 +184,11 @@ REST_FRAMEWORK = {
 }
 
 
+API_BASE_URL = "http://127.0.0.1:8000"
+
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 LOGIN_REDIRECT_URL = "/api/countries/"
 LOGOUT_REDIRECT_URL = "/api/login/"

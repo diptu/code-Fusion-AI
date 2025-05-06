@@ -1,0 +1,27 @@
+{% include "./header.html" %}
+{% include "./navbar.html" %}
+<script>
+  const accessToken = localStorage.getItem('access_token');
+
+  fetch('http://127.0.0.1:8000/api/token', {
+      headers: {
+          'Authorization': 'Bearer ' + accessToken
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      console.log('Countries:', data);
+      // Render the country data on the page
+  })
+  .catch(error => {
+      console.error('Error fetching countries:', error);
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="container">
+    {% block content %}
+    {% endblock content %}
+
+    {% include "./footer.html" %}

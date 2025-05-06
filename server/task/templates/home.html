@@ -1,0 +1,63 @@
+{% extends "includes/base.html" %}
+
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-3">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Code Fusion AI - Python Developer Assignment</h2>
+            <small>May 4, 2025</small>
+        </div>
+        <div class="card-body">
+            <h4>1. Overview</h4>
+            <p>
+                This assignment involves fetching data from an external API, formatting the data, and making it available via RESTful APIs. 
+                The data will be displayed on a secured web page where users can view country information using Django.
+            </p>
+
+            <h4>2. Assignment Phases</h4>
+
+            <h5 class="mt-3">2.1 Phase 1: Data Fetching and Storage</h5>
+            <ul>
+                <li>Start a new Django project and app.</li>
+                <li>Fetch data from <a href="https://restcountries.com/v3.1/all" target="_blank">REST Countries API</a>.</li>
+                <li>Design and implement models to store data.</li>
+                <li>Write a script to fetch and store data in the database.</li>
+            </ul>
+
+            <h5 class="mt-3">2.2 Phase 2: RESTful API Development</h5>
+            <ul>
+                <li>List all countries / Retrieve / Create / Update / Delete country data.</li>
+                <li>List regional or language-based countries.</li>
+                <li>Search by country name.</li>
+            </ul>
+
+            <h5 class="mt-3">2.3 Phase 3: Web Interface</h5>
+            <ul>
+                <li>Show country table: name, cca2, capital, population, timezone, and flag.</li>
+                <li>Include search + details view (regional/language countries).</li>
+                <li>Styled with Bootstrap or Bulma.</li>
+            </ul>
+
+            <h5 class="mt-3">2.4 Phase 4: Authentication and Security</h5>
+            <ul>
+                <li>Restrict API access to authenticated users.</li>
+                <li>Use Django's default authentication.</li>
+                <li>Login required to access country list page.</li>
+            </ul>
+
+            <h4 class="mt-4">3. Deliverables</h4>
+            <p>
+                Push your code to a public Git repository with setup instructions and commit history.
+            </p>
+
+            <h4 class="mt-4">4. Special Instructions</h4>
+            <ul>
+                <li>Use Python/Django for development.</li>
+                <li>Include third-party dependencies (in <code>requirements.txt</code>).</li>
+                <li>Provide a complete <code>README.md</code> with installation, dependencies, DB setup, and run instructions.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

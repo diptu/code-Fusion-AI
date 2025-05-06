@@ -149,6 +149,11 @@ class Country(models.Model):
     def __str__(self):
         return self.name_common
 
+    def get_absolute_url(self):
+        return reverse(
+            "travel:detail", kwargs={"pk": self.pk}
+        )  # f"/transportation/{self.pk}"
+
     @property
     def summary(self):
         languages = (
