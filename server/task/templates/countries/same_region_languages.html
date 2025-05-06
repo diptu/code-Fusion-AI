@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Countries in {{target_country.region}}</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ target_country.name_common }}</h1>
+    <p>Region: {{ target_country.region }}</p>
+
+    <h2>Countries in {{target_country.region}}:</h2>
+    {% if same_region_countries_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Country Name</th>
+                    <th>Spoken Languages</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in same_region_countries_data %}
+                    <tr>
+                        <td>{{ item.country.name_common }}</td>
+                        <td>
+                            {% if item.spoken_languages %}
+                                <ul>
+                                    {% for lang in item.spoken_languages %}
+                                        <li>{{ lang }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                No spoken languages listed.
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No other countries in the same region.</p>
+    {% endif %}
+</body>
+</html>

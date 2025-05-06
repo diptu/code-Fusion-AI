@@ -25,6 +25,52 @@ from django.views.generic import ListView
 from .models import Country
 
 
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from countries.models import Country
+
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
+from .models import (
+    Country,
+)  # Assuming your Country model is in the same app's models.py
+
+from django.views import generic
+from django.shortcuts import get_object_or_404
+from .models import Country  # Adjust import if needed
+import json  # To work with JSON data
+
+
+class SameRegionCountriesWithLanguagesView(generic.DetailView):
+    model = Country
+    template_name = "countries/same_region_languages.html"
+    context_object_name = "target_country"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        target_country = self.object
+        same_region_countries = Country.objects.filter(
+            region=target_country.region
+        ).exclude(pk=target_country.pk)
+
+        same_region_data = []
+        for country in same_region_countries:
+            languages_json = country.languages  # Access the JSON field
+            spoken_languages = (
+                languages_json if languages_json else []
+            )  # Handle potential None or empty JSON
+            same_region_data.append(
+                {
+                    "country": country,
+                    "spoken_languages": spoken_languages,
+                }
+            )
+
+        context["same_region_countries_data"] = same_region_data
+        return context
+
+
 class CountryListView(LoginRequiredMixin, ListView):
     model = Country
     template_name = "countries/country_list.html"
@@ -32,6 +78,13 @@ class CountryListView(LoginRequiredMixin, ListView):
     paginate_by = 10
     ordering = ["name_common"]
     login_url = "/api/login/"  # Redirects unauthenticated users to login
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("name_common", "")
+        if query:
+            queryset = queryset.filter(name_common__icontains=query)
+        return queryset
 
 
 class CountryDetailView(DetailView):

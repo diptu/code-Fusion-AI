@@ -1,0 +1,43 @@
+{% extends "includes/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Search Countries</h2>
+    <form method="get" class="form-inline mb-3">
+        <input type="text" name="name_common" class="form-control mr-2" placeholder="Search by name"
+               value="{{ search_query }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>CCA2</th>
+                <th>Capital</th>
+                <th>Population</th>
+                <th>Timezone</th>
+                <th>Flag</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for country in countries %}
+            <tr>
+                <td>{{ country.name_common }}</td>
+                <td>{{ country.cca2 }}</td>
+                <td>{{ country.capital|join:", " }}</td>
+                <td>{{ country.population }}</td>
+                <td>{{ country.timezones|join:", " }}</td>
+                <td>{{ country.flag }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No matching countries found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+    <nav>

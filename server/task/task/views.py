@@ -31,48 +31,23 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework.response import Response
 from django.conf import settings
 
-
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import AuthenticationForm
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from countries.models import Country
 
 
-class CustomLoginView(LoginView):
-    """
-    A custom LoginView to generate JWT token on successful login.
-    """
+class CountryListView(LoginRequiredMixin, ListView):
+    model = Country
+    template_name = "countries/country_list.html"
+    context_object_name = "countries"
+    paginate_by = 10
 
-    template_name = "registration/login.html"
-    form_class = AuthenticationForm
-
-    def form_valid(self, form):
-        """
-        Override form_valid to generate JWT token upon successful login.
-        """
-        user = form.get_user()
-
-        # Log the user in with Django's default login
-        login(self.request, user)
-
-        # Generate JWT token
-        refresh = RefreshToken.for_user(user)
-
-        # Return token as JSON response
-        return JsonResponse(
-            {
-                "access": str(refresh.access_token),
-                "refresh": str(refresh),
-            }
-        )
-
-    def form_invalid(self, form):
-        """
-        Override form_invalid to return an error message if login is unsuccessful.
-        """
-        return JsonResponse({"error": "Invalid credentials"}, status=400)
+    def get_queryset(self):
+        queryset = super().get_queryset().order_by("name_common")
+        query = self.request.GET.get("name_common", "")
+        if query:
+            queryset = queryset.filter(name_common__icontains=query)
+        return queryset
 
 
 class CustomTokenRefreshView(TokenRefreshView):

@@ -230,17 +230,6 @@ class CountriesInSameRegionView(generics.ListAPIView):
         return Country.objects.filter(region__iexact=region)
 
 
-# class CountriesByLanguageView(generics.ListAPIView):
-#     serializer_class = CountryNameSerializer
-
-#     def get_queryset(self):
-#         language = self.request.query_params.get("ln", None)
-#         if not language:
-#             return Country.objects.none()
-
-#         return Country.objects.filter(languages__icontains=language)
-
-
 class CountriesBySpokenLanguageView(generics.ListAPIView):
     """
     API endpoint that returns a sorted list of country names where a specified language is spoken.
