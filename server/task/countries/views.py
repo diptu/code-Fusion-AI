@@ -12,12 +12,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 
-
-import requests
-from django.conf import settings
-from django.views.generic import ListView
 from django.shortcuts import redirect
-from django.core.paginator import Paginator
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.contrib.auth.mixins import LoginRequiredMixin
