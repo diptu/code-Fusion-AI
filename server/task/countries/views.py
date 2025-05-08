@@ -1,38 +1,58 @@
 from countries.models import Country
-from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import render
 from django.views import generic
 from django.views.generic import DetailView, ListView
 from .models import Country
+from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class SameRegionCountriesWithLanguagesView(generic.DetailView):
     model = Country
     template_name = "countries/same_region_languages.html"
     context_object_name = "target_country"
+    paginate_by = settings.PAGE_SIZE  # e.g., 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         target_country = self.object
+
+        # Get same region countries (excluding the target one)
         same_region_countries = Country.objects.filter(
             region=target_country.region
         ).exclude(pk=target_country.pk)
 
+        # Prepare data
         same_region_data = []
         for country in same_region_countries:
-            languages_json = country.languages  # Access the JSON field
-            spoken_languages = (
-                languages_json if languages_json else []
-            )  # Handle potential None or empty JSON
+            languages_json = country.languages or {}
             same_region_data.append(
                 {
                     "country": country,
-                    "spoken_languages": spoken_languages,
+                    "spoken_languages": languages_json,
                 }
             )
 
-        context["same_region_countries_data"] = same_region_data
+        # Paginate the data
+        paginator = Paginator(same_region_data, self.paginate_by)
+        page_number = self.request.GET.get("page")
+
+        try:
+            page_obj = paginator.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        # Add to context
+        context["same_region_countries_data"] = page_obj
+        context["page_obj"] = page_obj
+        context["paginator"] = paginator  # Required for pagination controls
+        context["is_paginated"] = page_obj.has_other_pages()
         return context
 
 
@@ -40,7 +60,7 @@ class CountryListView(LoginRequiredMixin, ListView):
     model = Country
     template_name = "countries/country_list.html"
     context_object_name = "countries"
-    paginate_by = 10
+    paginate_by = settings.PAGE_SIZE
     ordering = ["name_common"]
     login_url = "/api/login/"  # Redirects unauthenticated users to login
 

@@ -8,6 +8,19 @@ from rest_framework.views import APIView
 
 from .serializers import CountrySerializer
 
+from rest_framework.permissions import BasePermission
+
+
+class IsSuperUser(BasePermission):
+    """
+    Allows access only to superusers.
+    """
+
+    def has_permission(self, request, view):
+        return (
+            request.user and request.user.is_authenticated and request.user.is_superuser
+        )
+
 
 class CountryListView(generics.ListAPIView):
     """
@@ -52,7 +65,7 @@ class CountryDetailView(generics.RetrieveAPIView):
 
 class CountryCreateView(generics.CreateAPIView):
     """
-    API endpoint for creating a new country record.
+    API endpoint for creating a new country record.Only Available to superuser
 
     This view accepts POST requests with the country data and creates a new
     country entry in the database. The request payload should contain the
@@ -83,7 +96,10 @@ class CountryCreateView(generics.CreateAPIView):
         -  POST api/country/create/
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated,
+        IsSuperUser,
+    ]  # Ensure user is authenticated and superuser
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
@@ -99,6 +115,7 @@ class CountryCreateView(generics.CreateAPIView):
 class CountryUpdateView(generics.RetrieveUpdateAPIView):
     """
     API endpoint to retrieve and update a Country instance by its 'name_common' field.
+    Only Available to superuser.
 
     Methods:
         - GET: Retrieve country details by 'name_common'.
@@ -116,7 +133,10 @@ class CountryUpdateView(generics.RetrieveUpdateAPIView):
         PUT /api/country/update/Norway/
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated,
+        IsSuperUser,
+    ]  # Ensure user is authenticated and superuser
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     lookup_field = "name_common"
@@ -153,7 +173,10 @@ class CountryDeleteView(APIView):
         DELETE /api/country/1/
     """
 
-    permission_classes = [IsAuthenticated]  # Ensure user is authenticated
+    permission_classes = [
+        IsAuthenticated,
+        IsSuperUser,
+    ]  # Ensure user is authenticated and superuser
 
     def delete(self, request, item_id):
         # Check if the user is a superuser
@@ -207,6 +230,7 @@ class CountrySearchByNameView(generics.ListAPIView):
 class CountriesInSameRegionView(generics.ListAPIView):
     """
     API endpoint that returns a list of countries in the specified region.
+    Only avaliable for Authenticated user
 
     Query Parameters:
         region (str): The name of the region (e.g., Africa, Europe).
@@ -218,6 +242,8 @@ class CountriesInSameRegionView(generics.ListAPIView):
         200 OK: A list of countries in the specified region.
         400 Bad Request: If no region is provided.
     """
+
+    permission_classes = [IsAuthenticated]  # Ensure user is authenticated
 
     serializer_class = CountrySerializer
 
@@ -231,7 +257,7 @@ class CountriesInSameRegionView(generics.ListAPIView):
 class CountriesBySpokenLanguageView(generics.ListAPIView):
     """
     API endpoint that returns a sorted list of country names where a specified language is spoken.
-
+    Only avaliable for Authenticated user
     Query Parameters:
         ln (str): The name (or partial name) of a language to filter countries by (case-insensitive).
 
@@ -256,6 +282,8 @@ class CountriesBySpokenLanguageView(generics.ListAPIView):
         400 Bad Request: If the 'ln' parameter is missing or malformed
                         (not explicitly handled here, returns empty list).
     """
+
+    permission_classes = [IsAuthenticated]  # Ensure user is authenticated
 
     def get_queryset(self):
         language_query = self.request.query_params.get("lang", "").strip().lower()

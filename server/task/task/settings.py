@@ -13,9 +13,17 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Specify the path to your .env file
+dotenv_path = BASE_DIR / "task/.env"
+
+# Load environment variables from the specified .env file
+load_dotenv(dotenv_path=dotenv_path)
 
 
 # Quick-start development settings - unsuitable for production
@@ -125,7 +133,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+# STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -134,6 +142,23 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Custom Setup
+
+# Now you can access your environment variables
+API_BASE_URL = os.getenv("API_BASE_URL")
+PAGE_SIZE = os.getenv("PAGE_SIZE")
+ACCESS_TOKEN_LIFETIME = int(os.getenv("ACCESS_TOKEN_LIFETIME"))
+REFRESH_TOKEN_LIFETIME = int(os.getenv("REFRESH_TOKEN_LIFETIME"))
+DEFAULT_THROTTLE_RATES_USER = os.getenv("DEFAULT_THROTTLE_RATES_USER")
+DEFAULT_THROTTLE_RATES_ANON = os.getenv("DEFAULT_THROTTLE_RATES_ANON")
+print(f"BASE_URL : {API_BASE_URL}")
+
+STATIC_URL = "/static/"
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
+LOGIN_REDIRECT_URL = f"{API_BASE_URL}/api/country/"
+LOGOUT_REDIRECT_URL = f"{API_BASE_URL}/api/login/"
+
 
 CSRF_COOKIE_SECURE = False
 
@@ -165,15 +190,17 @@ LOGGING = {
 
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),  # Adjust as needed
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        minutes=ACCESS_TOKEN_LIFETIME
+    ),  # Adjust as needed
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=REFRESH_TOKEN_LIFETIME),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 5,  # change to any number you prefer
+    "PAGE_SIZE": int(PAGE_SIZE),  # change to any number you prefer
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",  # for browser-based login
         "rest_framework_simplejwt.authentication.JWTAuthentication",  # for API token auth
@@ -181,14 +208,12 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": DEFAULT_THROTTLE_RATES_ANON,
+        "user": DEFAULT_THROTTLE_RATES_USER,
+    },
 }
-
-
-API_BASE_URL = "http://127.0.0.1:8000"
-
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-LOGIN_REDIRECT_URL = "/api/countries/"
-LOGOUT_REDIRECT_URL = "/api/login/"
