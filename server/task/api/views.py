@@ -150,7 +150,7 @@ class CountryDeleteView(APIView):
         404 Not Found: No country found with the given ID.
 
     Example:
-        DELETE /api/countries/1/
+        DELETE /api/country/1/
     """
 
     permission_classes = [IsAuthenticated]  # Ensure user is authenticated

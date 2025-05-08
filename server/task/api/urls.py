@@ -13,35 +13,35 @@ from .views import (
 app_name = "countries"
 
 urlpatterns = [
-    # GET /api/countries/
+    # GET /api/country/
     path("", CountryListView.as_view(), name="country-list"),
-    # /api/countries/search/?name_common=pak
+    # /api/country/search/?name_common=pak
     path(
         "search/",
         CountrySearchByNameView.as_view(),
         name="country-search-by-name",
     ),
-    # /api/countries/region/?region=Africa
+    # /api/country/region/?region=Africa
     path(
         "region/",
         CountriesInSameRegionView.as_view(),
         name="same-region-countries",
     ),
-    # GET: /api/countries/language/?ln=spanish
+    # GET: /api/country/language/?ln=spanish
     path(
         "language/",
         CountriesBySpokenLanguageView.as_view(),
         name="countries-by-language",
     ),
-    #  POST api/countries/create/
+    #  POST api/country/create/
     path("create/", CountryCreateView.as_view(), name="country-create"),
-    # PUT /api/countries/update/Norway
+    # PUT /api/country/update/Norway
     path(
         "update/<str:name_common>/",
         CountryUpdateView.as_view(),
         name="country-update",
     ),
-    # GET /api/countries/Lithuania/
+    # GET /api/country/Lithuania/
     path(
         "<str:name_common>/",
         CountryDetailView.as_view(),
