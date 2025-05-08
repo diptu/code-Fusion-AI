@@ -1,13 +1,90 @@
 from countries.models import Country
-from django.contrib.auth import authenticate, logout
+from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+class JWTLogoutView(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        response = HttpResponseRedirect(reverse_lazy("login"))
+
+        # Remove JWT cookies
+        response.delete_cookie("access_token")
+        response.delete_cookie("refresh_token")
+
+        messages.success(request, "You have been logged out.")
+        return response
+
+
+class JWTLoginView(LoginView):
+    template_name = "registration/login.html"
+
+    def form_valid(self, form):
+        # Log in the user (standard Django)
+        response = super().form_valid(form)
+
+        # Generate JWT tokens
+        user = form.get_user()
+        serializer = TokenObtainPairSerializer()
+        tokens = serializer.get_token(user)
+        access_token = str(tokens.access_token)
+        refresh_token = str(tokens)
+
+        # Set tokens in HTTP-only cookies
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            httponly=True,
+            secure=True,
+            samesite="Lax",
+        )
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=True,
+            samesite="Lax",
+        )
+
+        return response
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = TokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            data = response.data
+            access_token = data.get("access")
+            refresh_token = data.get("refresh")
+
+            # Set tokens in HTTP-only cookies
+            response.set_cookie(
+                key="access_token",
+                value=access_token,
+                httponly=True,
+                secure=True,  # Use False only in development
+                samesite="Lax",
+            )
+            response.set_cookie(
+                key="refresh_token",
+                value=refresh_token,
+                httponly=True,
+                secure=True,
+                samesite="Lax",
+            )
+
+        return response
 
 
 class CountryListView(LoginRequiredMixin, ListView):
@@ -29,50 +106,3 @@ def home_view(request):
         "title": "home",
     }
     return render(request, "home.html", context)
-
-
-class LogoutView(View):
-    """
-    Logs out an authenticated user and serves a logout confirmation page.
-    """
-
-    def get(self, request):
-        if request.user.is_authenticated:
-            logout(request)
-        return render(request, "registration/logout.html")  # This template should exist
-
-
-class CustomLoginView(APIView):
-    """
-    Login endpoint that returns JWT token on successful login.
-
-    POST /api/login/
-    {
-        "username": "user",
-        "password": "password"
-    }
-    Returns:
-    {
-        "access": "<JWT access token>",
-        "refresh": "<JWT refresh token>"
-    }
-    """
-
-    def post(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
-
-        # Authenticate the user
-        user = authenticate(username=username, password=password)
-
-        if user is not None:
-            # Generate the JWT tokens
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-            return Response(
-                {"access": access_token, "refresh": str(refresh)},
-                status=status.HTTP_200_OK,
-            )
-        return Response(
-            {"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED
-        )

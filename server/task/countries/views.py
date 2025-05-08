@@ -1,17 +1,26 @@
 from countries.models import Country
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.shortcuts import redirect, render
 from django.views import generic
 from django.views.generic import DetailView, ListView
 from .models import Country
-from django.conf import settings
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+class LoginRequiredMessageMixin(LoginRequiredMixin):
+    login_url = settings.LOGIN_URL  # Just in case it's not picked up
+    redirect_field_name = "next"
+
+    def handle_no_permission(self):
+        messages.error(self.request, "You must be logged in to view this page.")
+        return redirect(f"{self.get_login_url()}?next={self.request.get_full_path()}")
 
 
-class SameRegionCountriesWithLanguagesView(generic.DetailView):
+class SameRegionCountriesWithLanguagesView(
+    LoginRequiredMessageMixin, generic.DetailView
+):
     model = Country
     template_name = "countries/same_region_languages.html"
     context_object_name = "target_country"
@@ -56,7 +65,7 @@ class SameRegionCountriesWithLanguagesView(generic.DetailView):
         return context
 
 
-class CountryListView(LoginRequiredMixin, ListView):
+class CountryListView(ListView):
     model = Country
     template_name = "countries/country_list.html"
     context_object_name = "countries"
@@ -72,7 +81,7 @@ class CountryListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class CountryDetailView(DetailView):
+class CountryDetailView(LoginRequiredMessageMixin, DetailView):
     model = Country
     template_name = "countries/country_detail.html"
     context_object_name = "country"
@@ -83,6 +92,7 @@ class CountryDetailView(DetailView):
 
         # Add the summary property to the context
         context["summary"] = self.object.summary
+        context["language"] = self.object.language
 
         return context
 
@@ -116,3 +126,34 @@ def country_summary_view(request, *args, **kwargs):
             {"message": "Country not found"},
             status=404,
         )
+
+
+# def country_summary_view(request, *args, **kwargs):
+#     cca2 = kwargs.get("cca2")
+#     if not cca2:
+#         return render(
+#             request,
+#             "country_summary.html",
+#             {"message": "Missing 'cca2' parameter."},
+#             status=400,
+#         )
+
+#     try:
+#         country = Country.objects.get(cca2=cca2.upper())
+#         return render(
+#             request,
+#             "country_summary.html",
+#             {
+#                 "summary": country.summary,
+#                 "population_density": country.population_density,
+#                 "primary_currency": country.primary_currency,
+#                 "local_weekend": country.local_weekend,
+#             },
+#         )
+#     except Country.DoesNotExist:
+#         return render(
+#             request,
+#             "country_summary.html",
+#             {"message": "Country not found"},
+#             status=404,
+#         )

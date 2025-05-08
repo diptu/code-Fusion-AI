@@ -2,18 +2,42 @@
 
 {% block content %}
 <div class="container mt-5">
-    
-    <h1>{{ country.name_common }}</h1>
 
     {% if summary %}
-            <h1>Country Summary</h1>
-            <pre>{{ summary }}</pre>
-            <pre>population_density : {{ population_density }} (people per square kilometer)</pre>
-            <pre>primary_currency : {{ primary_currency }}</pre>
-            <pre>Weekend : {{ local_weekend }}</pre>
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-3 fw-bold mb-4">{{ country.name_common }}</h1>
+                <h2 class="h4 text-muted mb-3">Country Summary</h2>
+            </div>
+            <div class="col-md-4 text-end">
+                <span class="badge bg-info rounded-pill fs-6">{{ country.region }}</span>
+                {% if country.subregion %}
+                <span class="badge bg-secondary rounded-pill fs-6">{{ country.subregion }}</span>
+                {% endif %}
+            </div>
+        </div>
+        
+
+        <div class="card shadow-lg mb-4">
+            <div class="card-body">
+                <p class="lead mb-2" style="white-space: pre-wrap;">{{ summary }}</p>
+                <hr class="my-3">
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-people-fill me-2 text-primary"></i> <strong>Population Density:</strong> {{ population_density|floatformat:2 }} people per km²</li>
+                    <li class="mb-2"><i class="bi bi-currency-dollar me-2 text-success"></i> <strong>Primary Currency:</strong> {{ primary_currency }}</li>
+                    <li><i class="bi bi-calendar-week-fill me-2 text-warning"></i> <strong>Weekend:</strong> {{ local_weekend }}</li>
+                </ul>
+            </div>
+        </div>
 
     {% else %}
-            <p class="error">{{ message }}</p>
-        {% endif %}
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>
+                {{ message }}
+            </div>
+        </div>
+    {% endif %}
+
 </div>
 {% endblock %}

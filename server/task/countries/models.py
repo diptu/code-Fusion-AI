@@ -200,6 +200,21 @@ class Country(models.Model):
         return []
 
     @property
+    def neighbour(self):
+        """
+        Returns a queryset of Country objects that share a border with this one.
+        """
+        if isinstance(self.borders, dict):
+            return list(self.borders.values())
+        return []
+
+    @property
+    def shared_borders(self):
+        if not self.borders:
+            return Country.objects.none()
+        return Country.objects.filter(cca3__in=self.borders)
+
+    @property
     def population_density(self):
         """
         Returns the population density (people per square kilometer).

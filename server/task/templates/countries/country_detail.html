@@ -3,67 +3,98 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="mb-4">Country Summary</h2>
-    
-    <h1>{{ country.name_common }}</h1>
 
-    <div class="card">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h1 class="display-4">{{ country.name_common }}</h1>
+            <p class="lead">{{ country.name_official }}</p>
+        </div>
+        <div class="col-md-6 text-end">
+            <span style="font-size: 6rem;">{{ country.flag }}</span>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
         <div class="card-body">
-            <h5 class="card-title">Country Information</h5>
+            <h5 class="card-title mb-3">Country Information</h5>
 
-            <table class="table table-bordered">
-                <tr>
-                    <th>Country Name</th>
-                    <td>{{ country.name_common }}</td>
-                </tr>
-                <tr>
-                    <th>Official Name</th>
-                    <td>{{ country.name_official }}</td>
-                </tr>
-                <tr>
-                    <th>CCA2 Code</th>
-                    <td>{{ country.cca2 }}</td>
-                </tr>
-                <tr>
-                    <th>Capital</th>
-                    <td>{{ country.capital|join:", " }}</td>
-                </tr>
-                <tr>
-                    <th>Population</th>
-                    <td>{{ country.population }}</td>
-                </tr>
-                <tr>
-                    <th>Area</th>
-                    <td>{{ country.area }} km²</td>
-                </tr>
-                <tr>
-                    <th>Region</th>
-                    <td>{{ country.region }}</td>
-                </tr>
-                <tr>
-                    <th>Subregion</th>
-                    <td>{{ country.subregion }}</td>
-                </tr>
-                <tr>
-                    <th>Languages</th>
-                    <td>{{ country.languages|join:", " }}</td>
-                </tr>
-                <tr>
-                    <th>Timezone</th>
-                    <td>{{ country.timezones|join:", " }}</td>
-                </tr>
-                <tr>
-                    <th>Flag</th>
-                    <td>{{ country.flag}}</td>
-                </tr>
-                <tr>
-                    <th>Summary</th>
-                    <td><pre>{{ summary }}</pre></td>
-                </tr>
-            </table>
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+                <div class="col">
+                    <div class="border p-3 rounded">
+                        <strong>CCA2 Code:</strong> {{ country.cca2 }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 rounded">
+                        <strong>Capital:</strong> {{ country.capital|join:", " }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 rounded">
+                        <strong>Population:</strong> {{ country.population }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 rounded">
+                        <strong>Area:</strong> {{ country.area }} km²
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 rounded">
+                        <strong>Region:</strong> {{ country.region }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 rounded">
+                        <strong>Subregion:</strong> {{ country.subregion }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 rounded">
+                        <strong>Languages:</strong> {{ country.language|join:", " }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border p-3 rounded">
+                        <strong>Timezone:</strong> {{ country.timezones|join:", " }}
+                    </div>
+                </div>
+                <!-- <div class="col">
+                    <div class="border p-3 rounded">
+                        <strong>neighbour:</strong> {{ country.borders|join:", " }}
+                    </div>
+                </div> -->
+
+                <div class="col">
+                    <div class="border p-3 rounded">
+                      <strong>Neighbouring Countries:</strong>
+                      {% if country.shared_borders.exists %}
+                        <ul class="list-unstyled">
+                          {% for border in country.shared_borders %}
+                            <li>
+                              <a href="{% url 'country_summary' border.cca2 %}">
+                                {{ border.name_common }} ({{ border.cca2 }})
+                              </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% else %}
+                        <em>No bordering countries.</em>
+                      {% endif %}
+                    </div>
+                  </div>
+            </div>
+
+            <!-- {% if summary %}
+            <h6 class="mt-4">Summary</h6>
+            <div class="alert alert-info">
+                <pre style="white-space: pre-wrap;">{{ summary }}</pre>
+            </div>
+            {% endif %} -->
 
         </div>
     </div>
 
-    <a href="{% url 'country-list' %}" class="btn btn-primary mt-3">Back to Country List</a>
+    <a href="{% url 'country-list' %}" class="btn btn-outline-primary mt-3">Back to Country List</a>
 </div>
 {% endblock %}

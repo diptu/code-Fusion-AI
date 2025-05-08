@@ -22,11 +22,15 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
-# from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+# # from django.urls import path
+# from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .views import CustomTokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView
+
 
 # from countries import views
-from .views import LogoutView, home_view
+from .views import home_view
+from .views import JWTLoginView, JWTLogoutView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -46,15 +50,19 @@ urlpatterns = [
     path("country/", include("countries.urls")),
     path("api/country/", include("api.urls")),
     # Login
-    path(
-        "api/login/",
-        auth_views.LoginView.as_view(template_name="registration/login.html"),
-        name="login",
-    ),
-    path("api/logout/", LogoutView.as_view(), name="logout"),
-    path(
-        "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
-    ),  # login
+    path("api/login/", JWTLoginView.as_view(), name="login"),
+    path("api/logout/", JWTLogoutView.as_view(), name="logout"),
+    # path(
+    #     "api/login/",
+    #     auth_views.LoginView.as_view(template_name="registration/login.html"),
+    #     name="login",
+    # ),
+    # path("api/logout/", LogoutView.as_view(), name="logout"),
+    # path(
+    #     "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
+    # ),  # login
+    # path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # Swagger docs URLs
     re_path(

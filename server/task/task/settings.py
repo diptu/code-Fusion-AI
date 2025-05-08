@@ -156,7 +156,12 @@ STATIC_URL = "/static/"
 # STATICFILES_DIRS = [
 #     BASE_DIR / "static",
 # ]
-LOGIN_REDIRECT_URL = f"{API_BASE_URL}/api/country/"
+
+LOGIN_URL = f"{API_BASE_URL}/api/login/"
+LOGOUT_URL = f"{API_BASE_URL}/api/logout/"
+
+
+LOGIN_REDIRECT_URL = f"{API_BASE_URL}/country/"
 LOGOUT_REDIRECT_URL = f"{API_BASE_URL}/api/login/"
 
 
