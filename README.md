@@ -40,6 +40,15 @@ To fetch and store country data, run the Django shell:
 python manage.py shell
 ```
 ### Inside the shell, run the following:
+  - Will create a sueruser with username `admin` & password `Hello$123` and
+  - one reqular with username `test` & password `Hello$123`
+
+```bash
+from utils import setup_users
+setup_users()
+```
+
+
 ```bash
 from countries.utils import fetch_and_store_countries
 fetch_and_store_countries()

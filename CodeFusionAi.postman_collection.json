@@ -1,0 +1,526 @@
+{
+	"info": {
+		"_postman_id": "324350b4-0297-47f2-8488-228092399705",
+		"name": "CodeFusionAi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40522802"
+	},
+	"item": [
+		{
+			"name": "admin-auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let data = pm.response.json();",
+							"",
+							"pm.environment.set(\"access_token\", data.access);",
+							"pm.environment.set(\"refresh_token\", data.refresh);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "diptu",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "HelloKetty",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/token/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"token",
+						""
+					]
+				},
+				"description": "This endpoint makes an HTTP POST request to [http://127.0.0.1:8000/api/token/](http://127.0.0.1:8000/api/token/) in order to obtain a token for authentication. The request body should be of type x-www-form-urlencoded and include the following parameters:\n\n- `username` (text): The username of the user.\n    \n- `password` (text): The password of the user.\n    \n\nThe response to the request will have a status code of 200 and a content type of application/json. The response body will contain the following keys:\n\n- `refresh`: The refresh token for authentication.\n    \n- `access`: The access token for authentication."
+			},
+			"response": []
+		},
+		{
+			"name": "testuser-auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let data = pm.response.json();",
+							"",
+							"pm.environment.set(\"access_token\", data.access);",
+							"pm.environment.set(\"refresh_token\", data.refresh);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "diptu",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "HelloKetty",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/token/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"token",
+						""
+					]
+				},
+				"description": "This endpoint makes an HTTP POST request to [http://127.0.0.1:8000/api/token/](http://127.0.0.1:8000/api/token/) in order to obtain a token for authentication. The request body should be of type x-www-form-urlencoded and include the following parameters:\n\n- `username` (text): The username of the user.\n    \n- `password` (text): The password of the user.\n    \n\nThe response to the request will have a status code of 200 and a content type of application/json. The response body will contain the following keys:\n\n- `refresh`: The refresh token for authentication.\n    \n- `access`: The access token for authentication."
+			},
+			"response": []
+		},
+		{
+			"name": "refresh",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let data = pm.response.json();",
+							"",
+							"if (data.access) {",
+							"    pm.environment.set(\"access_token\", data.access);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/token/refresh/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"token",
+						"refresh",
+						""
+					]
+				},
+				"description": "### Refresh Token\n\nThis endpoint is used to refresh the access token by providing the refresh token.\n\n#### Request Body\n\n- `refresh` (string, required): The refresh token used to obtain a new access token.\n    \n\n#### Response\n\nThe response will be in JSON format with the following schema:\n\n``` json\n{\n  \"access\": \"\"\n}\n\n ```\n\n- `access` (string): The new access token obtained after refreshing the token."
+			},
+			"response": []
+		},
+		{
+			"name": "country list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/countries/region/?region=Asia",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"countries",
+						"region",
+						""
+					],
+					"query": [
+						{
+							"key": "region",
+							"value": "Asia"
+						}
+					]
+				},
+				"description": "### GET /api/countries/\n\nThis endpoint retrieves a list of countries.\n\n#### Request Body\n\n- token (text): (Optional) A token for authentication.\n    \n\n#### Response\n\nThe response will be a JSON object with the following schema:\n\n``` json\n{\n  \"count\": 0,\n  \"next\": \"\",\n  \"previous\": null,\n  \"results\": [\n    {\n      \"id\": 0,\n      \"cca2\": \"\",\n      \"cca3\": \"\",\n      \"ccn3\": \"\",\n      \"cioc\": \"\",\n      \"fifa\": \"\",\n      \"name_common\": \"\",\n      \"name_official\": \"\",\n      \"native_name\": {\n        \"eng\": {\n          \"official\": \"\",\n          \"common\": \"\"\n        },\n        \"tsn\": {\n          \"official\": \"\",\n          \"common\": \"\"\n        }\n      },\n      \"region\": \"\",\n      \"subregion\": \"\",\n      \"latlng\": [0],\n      \"capital_info\": {\n        \"latlng\": [0]\n      },\n      \"area\": 0,\n      \"landlocked\": true,\n      \"capital\": [\"\"],\n      \"borders\": [\"\"],\n      \"tld\": [\"\"],\n      \"languages\": {\n        \"eng\": \"\",\n        \"tsn\": \"\"\n      },\n      \"currencies\": {\n        \"BWP\": {\n          \"symbol\": \"\",\n          \"name\": \"\"\n        }\n      },\n      \"demonyms\": {\n        \"eng\": {\n          \"f\": \"\",\n          \"m\": \"\"\n        },\n        \"fra\": {\n          \"f\": \"\",\n          \"m\": \"\"\n        }\n      },\n      \"flag\": \"\",\n      \"flags\": {\n        \"png\": \"\",\n        \"svg\": \"\",\n        \"alt\": \"\"\n      },\n      \"coat_of_arms\": {\n        \"png\": \"\",\n        \"svg\": \"\"\n      },\n      \"maps\": {\n        \"googleMaps\": \"\",\n        \"openStreetMaps\": \"\"\n      },\n      \"gini\": {\n        \"2015\": 0\n      },\n      \"car\": {\n        \"signs\": [\"\"],\n        \"side\": \"\"\n      },\n      \"idd\": {\n        \"root\": \"\",\n        \"suffixes\": [\"\"]\n      },\n      \"alt_spellings\": [\"\"],\n      \"status\": \"\",\n      \"un_member\": true,\n      \"independent\": true,\n      \"start_of_week\": \"\",\n      \"population\": 0,\n      \"timezones\": [\"\"],\n      \"continents\": [\"\"],\n      \"translations\": {\n        \"ara\": {\n          \"official\": \"\",\n          \"common\": \"\"\n        },\n        \"bre\": {\n          \"official\": \"\",\n          \"common\": \"\"\n        },\n        ...\n      },\n      \"postal_code\": {\n        \"format\": null,\n        \"regex\": null\n      },\n      \"created_at\": \"\",\n      \"updated_at\": \"\"\n    }\n  ]\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "country-search-by-name(supports partial search)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/country/?name_common=Lit",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"country",
+						""
+					],
+					"query": [
+						{
+							"key": "name_common",
+							"value": "Lit"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "country-detail",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/countries/Lithuania",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						"Lithuania"
+					]
+				},
+				"description": "### GET /api/countries/Lithuania\n\nThis endpoint retrieves information about the country Lithuania.\n\n#### Request\n\n- Method: GET\n    \n- URL: `http://localhost:8000/api/countries/Lithuania`\n    \n\n#### Response\n\nThe response is a JSON object with the following schema:\n\n``` json\n{\n  \"id\": \"integer\",\n  \"cca2\": \"string\",\n  \"cca3\": \"string\",\n  \"ccn3\": \"integer\",\n  \"cioc\": \"string\",\n  \"fifa\": \"string\",\n  \"name_common\": \"string\",\n  \"name_official\": \"string\",\n  \"native_name\": \"string\",\n  \"region\": \"string\",\n  \"subregion\": \"string\",\n  \"latlng\": \"array\",\n  \"capital_info\": \"object\",\n  \"area\": \"number\",\n  \"landlocked\": \"boolean\",\n  \"capital\": \"string\",\n  \"borders\": \"array\",\n  \"tld\": \"string\",\n  \"languages\": \"array\",\n  \"currencies\": \"array\",\n  \"demonyms\": \"array\",\n  \"flag\": \"string\",\n  \"flags\": \"array\",\n  \"coat_of_arms\": \"string\",\n  \"maps\": \"array\",\n  \"gini\": \"number\",\n  \"car\": \"string\",\n  \"idd\": \"string\",\n  \"alt_spellings\": \"array\",\n  \"status\": \"string\",\n  \"un_member\": \"boolean\",\n  \"independent\": \"boolean\",\n  \"start_of_week\": \"string\",\n  \"population\": \"integer\",\n  \"timezones\": \"array\",\n  \"continents\": \"array\",\n  \"translations\": \"object\",\n  \"postal_code\": \"string\",\n  \"created_at\": \"string\",\n  \"updated_at\": \"string\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "same-region-countries",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/country/region/?region=Asia",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"country",
+						"region",
+						""
+					],
+					"query": [
+						{
+							"key": "region",
+							"value": "Asia"
+						}
+					]
+				},
+				"description": "### Get Countries by Region\n\nThis endpoint makes an HTTP GET request to retrieve a list of countries based on the specified region.\n\n#### Request Parameters\n\n- `region` (query parameter) - Specifies the region for which the countries are to be retrieved.\n    \n\n#### Response\n\nUpon a successful request, the server responds with a status code of 200 and a JSON object containing an array of country details. Each country object includes various attributes such as ID, country codes, names, region, subregion, capital, area, population, timezones, and translations in different languages.\n\nExample Response:\n\n``` json\n{\n    \"count\": 0,\n    \"next\": \"\",\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 0,\n            \"cca2\": \"\",\n            \"cca3\": \"\",\n            \"ccn3\": \"\",\n            \"cioc\": \"\",\n            \"fifa\": \"\",\n            \"name_common\": \"\",\n            \"name_official\": \"\",\n            \"native_name\": {\n                \"ara\": {\n                    \"official\": \"\",\n                    \"common\": \"\"\n                }\n            },\n            \"region\": \"\",\n            \"subregion\": \"\",\n            \"latlng\": [0],\n            \"capital_info\": {\n                \"latlng\": [0]\n            },\n            \"area\": 0,\n            \"landlocked\": true,\n            \"capital\": [\"\"],\n            \"borders\": null,\n            \"tld\": [\"\"],\n            \"languages\": {\n                \"ara\": \"\"\n            },\n            \"currencies\": {\n                \"BHD\": {\n                    \"symbol\": \"\",\n                    \"name\": \"\"\n                }\n            },\n            \"demonyms\": {\n                \"eng\": {\n                    \"f\": \"\",\n                    \"m\": \"\"\n                },\n                \"fra\": {\n                    \"f\": \"\",\n                    \"m\": \"\"\n                }\n            },\n            \"flag\": \"\",\n            \"flags\": {\n                \"png\": \"\",\n                \"svg\": \"\",\n                \"alt\": \"\"\n            },\n            \"coat_of_arms\": {\n                \"png\": \"\",\n                \"svg\": \"\"\n            },\n            \"maps\": {\n                \"googleMaps\": \"\",\n                \"openStreetMaps\": \"\"\n            },\n            \"gini\": null,\n            \"car\": {\n                \"signs\": [\"\"],\n                \"side\": \"\"\n            },\n            \"idd\": {\n                \"root\": \"\",\n                \"suffixes\": [\"\"]\n            },\n            \"alt_spellings\": [\"\"],\n            \"status\": \"\",\n            \"un_member\": true,\n            \"independent\": true,\n            \"start_of_week\": \"\",\n            \"population\": 0,\n            \"timezones\": [\"\"],\n            \"continents\": [\"\"],\n            \"translations\": {\n                \"ara\": {\n                    \"official\": \"\",\n                    \"common\": \"\"\n                },\n                ...\n            },\n            \"postal_code\": {\n                \"format\": \"\",\n                \"regex\": \"\"\n            },\n            \"created_at\": \"\",\n            \"updated_at\": \"\"\n        }\n    ]\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "CountriesBySpokenLanguage",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/countries/language/?ln=English",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						"language",
+						""
+					],
+					"query": [
+						{
+							"key": "ln",
+							"value": "English"
+						}
+					]
+				},
+				"description": "This endpoint makes an HTTP GET request to retrieve a list of countries where English is spoken. The request includes a query parameter \"ln\" with the value \"English\" to specify the language.\n\n### Request Body\n\nThere is no request body for this GET request.\n\n### Response Body\n\nThe response returns a status code of 200 and a content type of \"application/json\". The body of the response is an array of strings, representing the list of countries where English is spoken.\n\nExample:\n\n``` json\n[\"Country1\", \"Country2\", \"Country3\"]\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "country-create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cca2",
+							"value": "BD",
+							"type": "text"
+						},
+						{
+							"key": "cca3",
+							"value": "BGD",
+							"type": "text"
+						},
+						{
+							"key": "name_common",
+							"value": "Bangladesh",
+							"type": "text"
+						},
+						{
+							"key": "name_official",
+							"value": "People's Republic of Bangladesh",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/countries/create/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						"create",
+						""
+					]
+				},
+				"description": "### Create Country\n\nThis API endpoint is used to create a new country.\n\n#### Request Body\n\n- cca2 (text): The alpha-2 code of the country.\n    \n- cca3 (text): The alpha-3 code of the country.\n    \n- name_common (text): The common name of the country.\n    \n- name_official (text): The official name of the country.\n    \n\n#### Response\n\nUpon a successful creation, the API returns a status code of 201 and a JSON object containing the details of the newly created country, including its unique identifier (id), codes (cca2, cca3), names (name_common, name_official), and other relevant information."
+			},
+			"response": []
+		},
+		{
+			"name": "country-update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cca2",
+							"value": "BD",
+							"type": "text"
+						},
+						{
+							"key": "cca3",
+							"value": "BGD",
+							"type": "text"
+						},
+						{
+							"key": "name_common",
+							"value": "Bangladesh",
+							"type": "text"
+						},
+						{
+							"key": "name_official",
+							"value": "People's Republic of Bangladesh",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/countries/update/Bangladesh/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						"update",
+						"Bangladesh",
+						""
+					]
+				},
+				"description": "### Update Country Information\n\nThis endpoint allows the user to update the information for a specific country.\n\n#### Request Body Parameters\n\n- `cca2` (text) - The updated alpha-2 code for the country.\n    \n- `cca3` (text) - The updated alpha-3 code for the country.\n    \n- `name_common` (text) - The updated common name for the country.\n    \n- `name_official` (text) - The updated official name for the country.\n    \n\n#### Response\n\nThe API returns a status code of 401 and a JSON object with the following structure:\n\n``` json\n{\n    \"detail\": \"\",\n    \"code\": \"\",\n    \"messages\": [\n        {\n            \"token_class\": \"\",\n            \"token_type\": \"\",\n            \"message\": \"\"\n        }\n    ]\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "country-delete-by-id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "cca2",
+							"value": "BD",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "cca3",
+							"value": "BGD",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "name_common",
+							"value": "Bangladesh",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "name_official",
+							"value": "People's Republic of Bangladesh",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/countries/1758",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						"1758"
+					]
+				},
+				"description": "### DELETE /api/countries/1751\n\nThis endpoint is used to delete a specific country with the given ID.\n\n#### Request Body\n\n- No request body parameters are required for this request.\n    \n\n#### Response\n\n- Status: 204\n    \n- Content-Type: application/json\n    \n\n``` json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"message\": {\n            \"type\": \"string\"\n        }\n    }\n}\n\n ```"
+			},
+			"response": []
+		}
+	]
+}
