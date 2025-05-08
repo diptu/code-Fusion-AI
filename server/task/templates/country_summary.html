@@ -8,16 +8,11 @@
     {% if summary %}
             <h1>Country Summary</h1>
             <pre>{{ summary }}</pre>
-            <pre>population_density : {{ population_density }}</pre>
+            <pre>population_density : {{ population_density }} (people per square kilometer)</pre>
             <pre>primary_currency : {{ primary_currency }}</pre>
             <pre>Weekend : {{ local_weekend }}</pre>
-            <pre>spoken_language : {{ spoken_language }}</pre>
 
-            {% if is_island %}
-            <pre>Is a Islan</pre>
-        
-            {% endif %}
-        {% else %}
+    {% else %}
             <p class="error">{{ message }}</p>
         {% endif %}
 </div>

@@ -21,7 +21,9 @@
                 <th>Population</th>
                 <th>Timezone</th>
                 <th>Flag</th>
+                <th>Regional ountry</th>
                 <th>Details</th>
+
             </tr>
         </thead>
         <tbody>
@@ -33,6 +35,10 @@
                 <td>{{ country.population }}</td>
                 <td>{{ country.timezones|join:", " }}</td>
                 <td>{{ country.flag }}</td>
+
+                <td>
+                    <a href="{% url 'country-detail' country.pk %}related" class="btn btn-sm btn-info">View</a>
+                </td>
                 <td>
                     <a href="{% url 'country-detail' country.pk %}" class="btn btn-sm btn-info">View</a>
                 </td>

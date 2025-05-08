@@ -198,3 +198,59 @@ class Country(models.Model):
         if isinstance(self.languages, dict):
             return list(self.languages.values())
         return []
+
+    @property
+    def population_density(self):
+        """
+        Returns the population density (people per square kilometer).
+
+        Returns:
+            float | str: Density value or "N/A" if population or area is missing.
+        """
+        if self.population and self.area and self.area > 0:
+            return round(self.population / self.area, 2)
+        return "N/A"
+
+    @property
+    def primary_currency(self):
+        """
+        Returns the first listed currency name.
+
+        Returns:
+            str
+        """
+        if isinstance(self.currencies, dict) and self.currencies:
+            return next(iter(self.currencies.values())).get("name", "N/A")
+        return "N/A"
+
+    @property
+    def local_weekend(self):
+        """
+        Guesses typical weekend days based on the region.
+
+        Returns:
+            str
+        """
+        if self.region == "Middle East":
+            return "Friday-Saturday"
+        elif self.region == "Asia" and self.subregion == "South-Eastern Asia":
+            return "Saturday-Sunday"
+        else:
+            return "Saturday-Sunday"
+
+    @property
+    def spoken_language(self):
+        """
+        Returns a human-friendly, comma-separated string of spoken languages.
+
+        Returns:
+            str: Languages spoken in a readable format.
+        """
+        languages = self.spoken_language
+        if not languages:
+            return "No official languages listed"
+        if len(languages) == 1:
+            return languages[0]
+        if len(languages) == 2:
+            return f"{languages[0]} and {languages[1]}"
+        return f"{', '.join(languages[:-1])}, and {languages[-1]}"

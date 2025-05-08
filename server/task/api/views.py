@@ -1,17 +1,12 @@
-from rest_framework import generics
 from countries.models import Country
-from .serializers import CountrySerializer, CountryNameSerializer
-from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
-from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import InvalidToken
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-# from rest_framework import filters
-from django.db.models import Q
+from .serializers import CountrySerializer
 
 
 class CountryListView(generics.ListAPIView):
@@ -25,10 +20,10 @@ class CountryListView(generics.ListAPIView):
         A list of serialized country objects with complete details for each.
 
     Example:
-        GET /api/countries/
+        GET /api/country/
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     lookup_field = "name_common"
@@ -46,9 +41,10 @@ class CountryDetailView(generics.RetrieveAPIView):
         A serialized representation of the specified country's full data.
 
     Example:
-        GET /api/countries/Lithuania/
+        GET /api/country/Lithuania/
     """
 
+    permission_classes = [IsAuthenticated]
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     lookup_field = "name_common"  # or "pk", or another field like "cca2"
@@ -84,9 +80,10 @@ class CountryCreateView(generics.CreateAPIView):
         - 400: Bad request if the data is invalid or incomplete.
 
     Example:
-        -  POST api/countries/create/
+        -  POST api/country/create/
     """
 
+    permission_classes = [IsAuthenticated]
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
@@ -115,10 +112,11 @@ class CountryUpdateView(generics.RetrieveUpdateAPIView):
         404 Not Found: No country found with the provided 'name_common'.
 
     Example:
-        GET /api/countries/update/Norway/
-        PUT /api/countries/update/Norway/
+        GET /api/country/update/Norway/
+        PUT /api/country/update/Norway/
     """
 
+    permission_classes = [IsAuthenticated]
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     lookup_field = "name_common"
@@ -192,7 +190,7 @@ class CountrySearchByNameView(generics.ListAPIView):
         500 Internal Server Error: If an unexpected error occurs on the server.
 
     Example:
-        GET /api/countries/search/?name_common=lit
+        GET /api/country/search/?name_common=lit
 
     """
 
@@ -214,7 +212,7 @@ class CountriesInSameRegionView(generics.ListAPIView):
         region (str): The name of the region (e.g., Africa, Europe).
 
     Example:
-        GET /api/countries/region/?region=Africa
+        GET /api/country/region/?region=Africa
 
     Returns:
         200 OK: A list of countries in the specified region.
@@ -244,7 +242,7 @@ class CountriesBySpokenLanguageView(generics.ListAPIView):
         - Result is sorted alphabetically in ascending order.
 
     Example:
-        GET /api/countries/by-language/?ln=span
+        GET /api/country/language/?lang=span
 
     Responses:
         200 OK: Returns a list of country names.
@@ -260,7 +258,7 @@ class CountriesBySpokenLanguageView(generics.ListAPIView):
     """
 
     def get_queryset(self):
-        language_query = self.request.query_params.get("ln", "").strip().lower()
+        language_query = self.request.query_params.get("lang", "").strip().lower()
 
         if not language_query:
             return Country.objects.none()

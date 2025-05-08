@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends "includes/base.html" %}
+
+{% block content %}
     <title>Countries in {{target_country.region}}</title>
     <style>
         table {
@@ -52,5 +52,5 @@
     {% else %}
         <p>No other countries in the same region.</p>
     {% endif %}
-</body>
-</html>
+
+    {% endblock %}

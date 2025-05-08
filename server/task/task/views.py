@@ -1,39 +1,13 @@
-from django.contrib.auth import authenticate
+from countries.models import Country
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
+from django.views import View
+from django.views.generic import ListView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import InvalidToken
-
-from django.contrib.auth import logout
-from django.http import HttpResponseRedirect
-from django.views import View
-
-
-from django.shortcuts import render
-from django.contrib.auth import logout
-from django.views import View
-
-
-from django.shortcuts import render
-
-# Create your views here.
-
-
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework.response import Response
-from datetime import timedelta
-from django.conf import settings
-
-from rest_framework_simplejwt.views import TokenRefreshView
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
-from rest_framework.response import Response
-from django.conf import settings
-
-from django.views.generic import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from countries.models import Country
 
 
 class CountryListView(LoginRequiredMixin, ListView):
@@ -48,71 +22,6 @@ class CountryListView(LoginRequiredMixin, ListView):
         if query:
             queryset = queryset.filter(name_common__icontains=query)
         return queryset
-
-
-class CustomTokenRefreshView(TokenRefreshView):
-    serializer_class = TokenRefreshSerializer
-
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        if response.status_code == 200:
-            data = response.data
-            access_token = data.get("access")
-            refresh_token = data.get("refresh")
-
-            # Set the access token in cookies
-            response.set_cookie(
-                key="access_token",
-                value=access_token,
-                httponly=True,
-                secure=settings.DEBUG is False,  # Set to True in production
-                samesite="Lax",
-                max_age=3600,  # 1 hour
-            )
-
-            # Set the refresh token in cookies
-            response.set_cookie(
-                key="refresh_token",
-                value=refresh_token,
-                httponly=True,
-                secure=settings.DEBUG is False,
-                samesite="Lax",
-                max_age=7 * 24 * 3600,  # 7 days
-            )
-
-        return response
-
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = TokenObtainPairSerializer
-
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        if response.status_code == 200:
-            data = response.data
-            access_token = data.get("access")
-            refresh_token = data.get("refresh")
-
-            # Set secure cookie attributes as needed
-            response.set_cookie(
-                key="access_token",
-                value=access_token,
-                httponly=True,
-                secure=settings.DEBUG is False,  # Set to True in production
-                samesite="Lax",
-                max_age=3600,  # 1 hour
-            )
-
-            response.set_cookie(
-                key="refresh_token",
-                value=refresh_token,
-                httponly=True,
-                secure=settings.DEBUG is False,
-                samesite="Lax",
-                max_age=7 * 24 * 3600,  # 7 days
-            )
-
-        return response
 
 
 def home_view(request):

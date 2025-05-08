@@ -1,40 +1,10 @@
-from django.http import HttpResponse
 from countries.models import Country
-
-from django.views.generic import ListView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-# views.py
-import requests
 from django.conf import settings
-from django.views.generic import ListView
-from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
-
-from django.shortcuts import redirect
-from rest_framework_simplejwt.tokens import RefreshToken
-
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView
-from .models import Country
-
-
-from django.views.generic import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from countries.models import Country
-
-
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView
-from .models import (
-    Country,
-)  # Assuming your Country model is in the same app's models.py
-
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
-from django.shortcuts import get_object_or_404
-from .models import Country  # Adjust import if needed
-import json  # To work with JSON data
+from django.views.generic import DetailView, ListView
+from .models import Country
 
 
 class SameRegionCountriesWithLanguagesView(generic.DetailView):
@@ -97,21 +67,32 @@ class CountryDetailView(DetailView):
         return context
 
 
-# class CountryListView(LoginRequiredMixin, ListView):
-#     model = Country
-#     template_name = "countries/country_list.html"
-#     context_object_name = "countries"
-#     paginate_by = 10  # Number of countries per page
-#     ordering = ["name_common"]  # Optional
-
-
 def country_summary_view(request, *args, **kwargs):
     cca2 = kwargs.get("cca2")
     if not cca2:
-        return HttpResponse("Missing 'cca2' parameter.", status=400)
+        return render(
+            request,
+            "country_summary.html",
+            {"message": "Missing 'cca2' parameter."},
+            status=400,
+        )
 
     try:
         country = Country.objects.get(cca2=cca2.upper())
-        return HttpResponse(f"<pre>{country.summary}</pre>")
+        return render(
+            request,
+            "country_summary.html",
+            {
+                "summary": country.summary,
+                "population_density": country.population_density,
+                "primary_currency": country.primary_currency,
+                "local_weekend": country.local_weekend,
+            },
+        )
     except Country.DoesNotExist:
-        return HttpResponse("Country not found", status=404)
+        return render(
+            request,
+            "country_summary.html",
+            {"message": "Country not found"},
+            status=404,
+        )

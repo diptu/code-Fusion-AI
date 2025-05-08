@@ -16,26 +16,17 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
-
-# from countries import views
-from .views import LogoutView
+from django.contrib.auth import views as auth_views
+from django.urls import include, path, re_path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
 # from django.urls import path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from django.contrib.auth import views as auth_views
-
-from django.contrib import admin
-from django.urls import path, include, re_path
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-
-from .views import home_view, CustomTokenObtainPairView
+# from countries import views
+from .views import LogoutView, home_view
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -53,7 +44,7 @@ urlpatterns = [
     path("", home_view, name="home"),
     path("admin/", admin.site.urls),
     path("country/", include("countries.urls")),
-    path("api/countries/", include("api.urls")),
+    path("api/country/", include("api.urls")),
     # Login
     path(
         "api/login/",
@@ -62,14 +53,9 @@ urlpatterns = [
     ),
     path("api/logout/", LogoutView.as_view(), name="logout"),
     path(
-        "api/token/",
-        CustomTokenObtainPairView.as_view(),
-        name="custom_token_obtain_pair",
-    ),
-    # path(
-    #     "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
-    # ),  # login
-    # path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+        "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
+    ),  # login
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # Swagger docs URLs
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
