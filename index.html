@@ -93,6 +93,12 @@
 <li><a href="#4-prerequisites">4. Prerequisites</a></li>
 <li><a href="#5-setup-and-installation">5. Setup and Installation</a></li>
 <li><a href="#6-accessing-the-application">6. Accessing the Application</a></li>
+<li><a href="#-run-the-code-fusion-app-with-docker">🚀 Run the Code Fusion App with Docker</a><ul>
+<li><a href="#-pull-the-docker-image">🐳 Pull the Docker Image</a></li>
+<li><a href="#️-run-the-container">▶️ Run the Container</a></li>
+<li><a href="#-access-the-app">🌐 Access the App</a></li>
+</ul>
+</li>
 </ul>
 <h2 id="1-introduction">1. Introduction</h2>
 <p>The Django Country Data Project is designed to provide a simple and efficient way to access and display information about countries. It automates the process of retrieving data from the REST Countries API and stores it in a local database, making it easily accessible through a Django-powered web interface.</p>
@@ -157,27 +163,31 @@
 </span></code></pre></div>
 <h4 id="on-windows">On Windows:</h4>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>.<span class="w"></span>env<span class="se">\S</span>criptsctivate
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>.<span class="se">\e</span>nv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
 </span></code></pre></div>
 <h3 id="53-install-dependencies">5.3. Install Dependencies</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>server/task
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</span></code></pre></div>
+</div>
+<ul>
+<li>
+<p>Open the Django shell:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>manage.py<span class="w"> </span>shell
 </span></code></pre></div>
 <h3 id="54-apply-database-migrations">5.4. Apply Database Migrations</h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>server/task
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>python<span class="w"> </span>manage.py<span class="w"> </span>makemigrations
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>python<span class="w"> </span>manage.py<span class="w"> </span>migrate
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>python<span class="w"> </span>manage.py<span class="w"> </span>makemigrations
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>python<span class="w"> </span>manage.py<span class="w"> </span>migrate
 </span></code></pre></div>
 <h3 id="55-fetch-and-store-country-data">5.5. Fetch and Store Country Data</h3>
 <p>Open the Django shell:
 - Inside the shell, run the following:
 - Will create a sueruser with username <code>admin</code> &amp; password <code>Hello$123</code> and
 - one reqular with username <code>test</code> &amp; password <code>Hello$123</code></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>from<span class="w"> </span>utils<span class="w"> </span>import<span class="w"> </span>setup_users
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>setup_users<span class="o">()</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>from<span class="w"> </span>utils<span class="w"> </span>import<span class="w"> </span>setup_users
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>setup_users<span class="o">()</span>
 </span></code></pre></div>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python<span class="w"> </span>manage.py<span class="w"> </span>shell
-</span></code></pre></div>
-<p>Then run the following inside the shell:</p>
+<p>Then run the following inside the shell to fetch the data from the API and store it in the database:</p>
 <div class="language-py highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">countries.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_and_store_countries</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">fetch_and_store_countries</span><span class="p">()</span>
 </span></code></pre></div>
@@ -188,7 +198,8 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>python<span class="w"> </span>manage.py<span class="w"> </span>runserver
 </span></code></pre></div>
 <p>Visit <code>http://127.0.0.1:8000/</code> in your browser to access the application.</p>
-</div>
+</li>
+</ul>
 <h2 id="6-accessing-the-application">6. Accessing the Application</h2>
 <div class="admonition success">
 <p class="admonition-title">Accessing the Application</p>
@@ -197,6 +208,26 @@
 </span></code></pre></div>
 <p>You’ll see the main interface of the Django Country Data Project. From here, you can explore, search, and view detailed country information.</p>
 </div>
+<h2 id="run-the-code-fusion-app-with-docker">🚀 Run the Code Fusion App with Docker</h2>
+<h3 id="pull-the-docker-image">🐳 Pull the Docker Image</h3>
+<p>To fetch the latest public image from Docker Hub:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>diptu/code_fusion_img:latest
+</span></code></pre></div></p>
+<h3 id="run-the-container">▶️ Run the Container</h3>
+<blockquote>
+<p>To start the application:</p>
+</blockquote>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>code_fusion<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>diptu/code_fusion_img:latest
+</span></code></pre></div>
+<h3 id="access-the-app">🌐 Access the App</h3>
+<p>Once the container is running, open your browser and visit:</p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>http://localhost:8000
+</span></code></pre></div>
+Now you can access the project at <code>http://127.0.0.1:8000/</code> in your browser.</p>
+<h3 id="stop-and-remove-the-container">🛑 Stop and Remove the Container</h3>
+<p>-To stop and remove the container when you're done:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>docker<span class="w"> </span>stop<span class="w"> </span>code_fusion<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>rm<span class="w"> </span>code_fusion
+</span></code></pre></div>
               
             </div>
           </div><footer>
@@ -240,5 +271,5 @@
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-05-08 11:40:14.550107+00:00
+Build Date UTC : 2025-05-10 11:23:57.617374+00:00
 -->
