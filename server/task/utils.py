@@ -15,7 +15,7 @@ def setup_users():
 
     # Set up Django environment (assuming this script is in your Django project root)
     os.environ.setdefault(
-        "DJANGO_SETTINGS_MODULE", "your_project_name.settings"
+        "DJANGO_SETTINGS_MODULE", "task.settings"
     )  # Replace with your project name
     django.setup()
 
@@ -60,4 +60,5 @@ def setup_users():
 
 
 if __name__ == "__main__":
-    create_django_users()
+    setup_users()
+    fetch_and_store_countries()

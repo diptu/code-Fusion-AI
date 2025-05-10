@@ -3,6 +3,8 @@
 import requests
 import logging
 from django.core.exceptions import ValidationError
+
+
 from countries.models import Country
 
 logger = logging.getLogger(__name__)
@@ -74,3 +76,7 @@ def fetch_and_store_countries():
             logger.error(
                 f"Unexpected error while saving {country_data.get('name_common')}: {str(e)}"
             )
+
+
+if __name__ == "__main__":
+    fetch_and_store_countries()

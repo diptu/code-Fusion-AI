@@ -1,0 +1,14 @@
+version: '1.0'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: code_fusion_img:latest
+    container_name: code_fusion
+    user: root
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app

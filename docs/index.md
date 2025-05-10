@@ -27,6 +27,10 @@ This document provides a comprehensive guide to setting up, running, and using t
   - [4. Prerequisites](#4-prerequisites)
   - [5. Setup and Installation](#5-setup-and-installation)
   - [6. Accessing the Application](#6-accessing-the-application)
+  - [🚀 Run the Code Fusion App with Docker](#-run-the-code-fusion-app-with-docker)
+    - [🐳 Pull the Docker Image](#-pull-the-docker-image)
+    - [▶️ Run the Container](#️-run-the-container)
+    - [🌐 Access the App](#-access-the-app)
 
 ## 1. Introduction
 
@@ -99,13 +103,19 @@ Ensure the following are installed on your system:
     ### 5.3. Install Dependencies
 
     ```bash
+    cd server/task
     pip install -r requirements.txt
+    ```
+   
+   - Open the Django shell:
+  
+    ```bash
+    python manage.py shell
     ```
 
     ### 5.4. Apply Database Migrations
 
     ```bash
-    cd server/task
     python manage.py makemigrations
     python manage.py migrate
     ```
@@ -122,11 +132,7 @@ Ensure the following are installed on your system:
     setup_users()
     ```
 
-    ```bash
-    python manage.py shell
-    ```
-
-    Then run the following inside the shell:
+    Then run the following inside the shell to fetch the data from the API and store it in the database:
 
     ```py
     from countries.utils import fetch_and_store_countries
@@ -157,3 +163,31 @@ Ensure the following are installed on your system:
     ```
 
     You’ll see the main interface of the Django Country Data Project. From here, you can explore, search, and view detailed country information.
+
+
+  ## 🚀 Run the Code Fusion App with Docker
+  ### 🐳 Pull the Docker Image
+  To fetch the latest public image from Docker Hub:
+  ```bash
+  docker pull diptu/code_fusion_img:latest
+  ```
+  ### ▶️ Run the Container
+  > To start the application:
+
+  ```bash
+  docker run -d --name code_fusion -p 8000:8000 diptu/code_fusion_img:latest
+  ```
+
+###  🌐 Access the App
+Once the container is running, open your browser and visit:
+
+```bash
+http://localhost:8000
+```
+###🛑 Stop and Remove the Container
+ -To stop and remove the container when you're done:
+
+```bash
+docker stop code_fusion && docker rm code_fusion
+```
+  Now you can access the project at `http://127.0.0.1:8000/` in your browser.

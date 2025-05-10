@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # Specify the path to your .env file
 dotenv_path = BASE_DIR / "task/.env"
 
@@ -35,7 +36,7 @@ SECRET_KEY = "django-insecure-a41a@cs$lw%#n2ynes*f1n$e6)hk4)ds+4a+wvsq(-7cr)6+2#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
 
 
 # Application definition

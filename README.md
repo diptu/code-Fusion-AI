@@ -60,3 +60,20 @@ fetch_and_store_countries()
 python manage.py runserver
 ```
 Now you can access the project at `http://127.0.0.1:8000/` in your browser.
+
+## 🚀 Run the Code Fusion App with Docker
+### 🐳 Pull the Docker Image
+To fetch the latest public image from Docker Hub:
+```bash
+docker pull diptu/code_fusion_img:latest
+```
+### ▶️ Run the Container
+> To start the application:
+
+```bash
+docker run -d \
+  --name code_fusion \
+  -p 8000:8000 \
+  diptu/code_fusion_img:latest
+```
+Now you can access the project at `http://127.0.0.1:8000/` in your browser.
