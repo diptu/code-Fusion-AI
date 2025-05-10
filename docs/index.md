@@ -97,7 +97,7 @@ Ensure the following are installed on your system:
     #### On Windows:
     ```bash
     python -m venv venv
-    .env\Scriptsctivate
+    .\env\Scripts\activate
     ```
 
     ### 5.3. Install Dependencies
@@ -165,18 +165,18 @@ Ensure the following are installed on your system:
     You’ll see the main interface of the Django Country Data Project. From here, you can explore, search, and view detailed country information.
 
 
-  ## 🚀 Run the Code Fusion App with Docker
-  ### 🐳 Pull the Docker Image
-  To fetch the latest public image from Docker Hub:
-  ```bash
-  docker pull diptu/code_fusion_img:latest
-  ```
-  ### ▶️ Run the Container
-  > To start the application:
+## 🚀 Run the Code Fusion App with Docker
+### 🐳 Pull the Docker Image
+To fetch the latest public image from Docker Hub:
+```bash
+docker pull diptu/code_fusion_img:latest
+```
+### ▶️ Run the Container
+> To start the application:
 
-  ```bash
-  docker run -d --name code_fusion -p 8000:8000 diptu/code_fusion_img:latest
-  ```
+```bash
+docker run -d --name code_fusion -p 8000:8000 diptu/code_fusion_img:latest
+```
 
 ###  🌐 Access the App
 Once the container is running, open your browser and visit:
@@ -184,10 +184,11 @@ Once the container is running, open your browser and visit:
 ```bash
 http://localhost:8000
 ```
+Now you can access the project at `http://127.0.0.1:8000/` in your browser.
+
 ###🛑 Stop and Remove the Container
- -To stop and remove the container when you're done:
+-To stop and remove the container when you're done:
 
 ```bash
 docker stop code_fusion && docker rm code_fusion
 ```
-  Now you can access the project at `http://127.0.0.1:8000/` in your browser.

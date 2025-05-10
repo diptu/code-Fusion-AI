@@ -25,6 +25,7 @@ source venv/bin/activate   # On Windows, use `venv\Scripts\activate`
 - Install the required dependencies:
 
 ```bash
+cd server/task
 pip3 install -r requirements.txt
 ```
 ## Apply Database Migrations
@@ -46,29 +47,26 @@ python manage.py shell
 ```bash
 from utils import setup_users
 setup_users()
-```
-
-
-```bash
 from countries.utils import fetch_and_store_countries
 fetch_and_store_countries()
 ```
 ##Start the Django Development Server
 - Start the Django development server:
 
-```bash
-python manage.py runserver
-```
+
 Now you can access the project at `http://127.0.0.1:8000/` in your browser.
 
-## 🚀 Run the Code Fusion App with Docker
-### 🐳 Pull the Docker Image
+### 🚀 Run the Code Fusion App with Docker
+  
+ 🐳 Pull the Docker Image
 To fetch the latest public image from Docker Hub:
+
 ```bash
 docker pull diptu/code_fusion_img:latest
 ```
-### ▶️ Run the Container
-> To start the application:
+
+▶️ Run the Container
+- To start the application:
 
 ```bash
 docker run -d \
@@ -77,3 +75,10 @@ docker run -d \
   diptu/code_fusion_img:latest
 ```
 Now you can access the project at `http://127.0.0.1:8000/` in your browser.
+
+### 🛑 Stop and Remove the Container
+-To stop and remove the container when you're done:
+
+```bash
+docker stop code_fusion && docker rm code_fusion
+```
